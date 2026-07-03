@@ -1,0 +1,401 @@
+Seu código já está bem organizado e é perfeito para conectar a uma interface. A ideia é deixar o JavaScript responsável pela lógica e o HTML/CSS apenas pela apresentação.
+
+Uma estrutura simples ficaria assim:
+
+```
+📂 biblioteca
+│── index.html
+│── style.css
+└── script.js
+```
+
+* **index.html** → Interface.
+* **style.css** → Estilo.
+* **script.js** → Seu código JavaScript (com pequenas adaptações).
+
+---
+
+# index.html
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Virtual</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>📚 Biblioteca Virtual</h1>
+</header>
+
+<section class="formulario">
+
+    <h2>Adicionar Livro</h2>
+
+    <input type="text" id="nome" placeholder="Nome do Livro">
+    <input type="text" id="autor" placeholder="Autor">
+    <input type="number" id="ano" placeholder="Ano">
+    <input type="text" id="genero" placeholder="Gênero">
+    <input type="number" id="estoque" placeholder="Estoque">
+
+    <button onclick="adicionarLivro()">Adicionar</button>
+
+</section>
+
+
+<section class="acoes">
+
+<h2>Ações</h2>
+
+<input type="text" id="nomeLivro" placeholder="Nome do livro">
+
+<div class="botoes">
+
+<button onclick="alugarLivro()">Alugar</button>
+
+<button onclick="devolverLivro()">Devolver</button>
+
+<button onclick="buscarLivro()">Buscar</button>
+
+<button onclick="removerLivro()">Remover</button>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Livros</h2>
+
+<div id="listaLivros">
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+```
+
+---
+
+# style.css
+
+```css
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+    background:#ececec;
+}
+
+header{
+
+    background:#1f3b73;
+    color:white;
+    padding:20px;
+    text-align:center;
+
+}
+
+section{
+
+    background:white;
+    width:90%;
+    max-width:1000px;
+    margin:20px auto;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.2);
+
+}
+
+h2{
+
+    margin-bottom:15px;
+
+}
+
+input{
+
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
+
+}
+
+button{
+
+    padding:10px 18px;
+    margin:5px;
+    border:none;
+    background:#1f3b73;
+    color:white;
+    cursor:pointer;
+    border-radius:5px;
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#2f5cb4;
+
+}
+
+.botoes{
+
+    display:flex;
+    flex-wrap:wrap;
+
+}
+
+.card{
+
+    border:1px solid #ddd;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    background:#fafafa;
+
+}
+
+.card h3{
+
+    color:#1f3b73;
+}
+
+.card p{
+
+    margin:5px 0;
+
+}
+```
+
+---
+
+# Adaptando seu JavaScript
+
+Crie uma função para atualizar a lista na tela.
+
+```javascript
+function atualizarTela(){
+
+    const lista = document.getElementById("listaLivros");
+
+    lista.innerHTML="";
+
+    biblioteca.livros.forEach(livro=>{
+
+        lista.innerHTML+=`
+
+        <div class="card">
+
+        <h3>${livro.nome}</h3>
+
+        <p><strong>Autor:</strong> ${livro.autor}</p>
+
+        <p><strong>Ano:</strong> ${livro.ano}</p>
+
+        <p><strong>Gênero:</strong> ${livro.genero}</p>
+
+        <p><strong>Estoque:</strong> ${livro.estoque}</p>
+
+        <p><strong>Alugado:</strong> ${livro.vezesAlugado} vezes</p>
+
+        </div>
+
+        `;
+
+    });
+
+}
+```
+
+---
+
+## Adicionar livro
+
+```javascript
+function adicionarLivro(){
+
+    biblioteca.adicionarLivros(
+
+        document.getElementById("nome").value,
+
+        document.getElementById("autor").value,
+
+        Number(document.getElementById("ano").value),
+
+        document.getElementById("genero").value,
+
+        Number(document.getElementById("estoque").value)
+
+    );
+
+    atualizarTela();
+
+}
+```
+
+---
+
+## Alugar
+
+```javascript
+function alugarLivro(){
+
+    const nome = document.getElementById("nomeLivro").value;
+
+    biblioteca.alugar(nome);
+
+    atualizarTela();
+
+}
+```
+
+---
+
+## Devolver
+
+```javascript
+function devolverLivro(){
+
+    const nome = document.getElementById("nomeLivro").value;
+
+    biblioteca.devolver(nome);
+
+    atualizarTela();
+
+}
+```
+
+---
+
+## Remover
+
+```javascript
+function removerLivro(){
+
+    const nome = document.getElementById("nomeLivro").value;
+
+    biblioteca.removerLivro(nome);
+
+    atualizarTela();
+
+}
+```
+
+---
+
+## Buscar
+
+```javascript
+function buscarLivro(){
+
+    const nome = document.getElementById("nomeLivro").value;
+
+    const livro = biblioteca.buscar(nome);
+
+    if(livro){
+
+        alert(`Livro encontrado!
+
+${livro.nome}
+
+Autor: ${livro.autor}
+
+Ano: ${livro.ano}
+
+Estoque: ${livro.estoque}`);
+
+    }
+
+}
+```
+
+---
+
+## No final do arquivo
+
+Depois de adicionar seus livros iniciais:
+
+```javascript
+atualizarTela();
+```
+
+---
+
+## Como ficará a interface
+
+```
+----------------------------------------------------
+                📚 Biblioteca Virtual
+----------------------------------------------------
+
+Adicionar Livro
+
+[ Nome............................. ]
+
+[ Autor............................ ]
+
+[ Ano........ ]
+
+[ Gênero................ ]
+
+[ Estoque.... ]
+
+        [Adicionar]
+
+
+Ações
+
+[Nome do Livro.........................]
+
+[Alugar] [Devolver] [Buscar] [Remover]
+
+
+----------------------------------------------------
+Harry Potter e a Pedra Filosofal
+
+Autor: J.K. Rowling
+
+Ano: 1997
+
+Gênero: Fantasia
+
+Estoque: 995
+
+Alugado: 5 vezes
+----------------------------------------------------
+
+----------------------------------------------------
+Game of Thrones
+
+Autor: George R. R. Martin
+
+Ano: 1996
+
+Gênero: Fantasia
+
+Estoque: 1000
+
+Alugado: 0 vezes
+----------------------------------------------------
+```
+
+Esse front-end já atende todas as funções do seu objeto `biblioteca`. Se o projeto for um trabalho de faculdade, você pode dar um passo além e criar uma interface mais moderna, com layout responsivo, barra de pesquisa em tempo real, modal para adicionar livros, ícones, animações e um design inspirado em sistemas profissionais de bibliotecas.
